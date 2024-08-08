@@ -1,12 +1,17 @@
 import { useNavigate } from 'react-router-dom';
 import Logo from './logo';
 import { LogOut } from 'lucide-react';
+import { useStateValue } from '@/lib/context';
 
 export default function Header() {
   const navigate = useNavigate();
+  const [, dispatch] = useStateValue();
 
   const handleLogout = () => {
-    localStorage.removeItem('auth:token');
+    dispatch!({
+      type: 'SET',
+      payload: null,
+    });
     navigate('/', { replace: true });
   };
 

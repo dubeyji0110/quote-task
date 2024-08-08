@@ -82,6 +82,7 @@ export default function CreateQuote({ user }: IProps) {
       description: 'Posted',
       variant: 'success',
     });
+    form.resetField('text');
     navigate('/home');
   };
 

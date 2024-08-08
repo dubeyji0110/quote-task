@@ -6,8 +6,10 @@ import Home from './pages/home';
 import { Toaster } from './components/ui/toaster';
 import axios from './lib/axios';
 import Create from './pages/create';
+import { useStateValue } from './lib/context';
 
 function App() {
+  const [auth] = useStateValue();
   const [user, setUser] = useState<JwtPayload | null>(null);
 
   const router = createBrowserRouter([
@@ -26,16 +28,15 @@ function App() {
   ]);
 
   useEffect(() => {
-    const token = localStorage.getItem('auth:token');
-    if (token) {
-      setUser(jwtDecode(token));
-      axios.defaults.headers.common.Authorization = token;
+    if (auth) {
+      setUser(jwtDecode(auth));
+      axios.defaults.headers.common.Authorization = auth;
       if (window.location.pathname === '/') window.location.assign('/home');
     } else {
       setUser(null);
       if (window.location.pathname !== '/') window.location.assign('/');
     }
-  }, []);
+  }, [auth]);
 
   return (
     <>

@@ -4,7 +4,7 @@ import Header from '@/components/header';
 import CreateQuote from '@/components/create-quote';
 import axios from '@/lib/axios';
 import { useNavigate } from 'react-router-dom';
-axios.defaults.headers.common.Authorization = localStorage.getItem('auth:token');
+import { useStateValue } from '@/lib/context';
 
 interface IProps {
   user?: JwtPayload;
@@ -12,12 +12,13 @@ interface IProps {
 
 export default function Create({ user }: IProps) {
   const navigate = useNavigate();
+  const [auth] = useStateValue();
 
   const handleBack = () => navigate('/home');
 
   useEffect(() => {
-    axios.defaults.headers.common.Authorization = localStorage.getItem('auth:token');
-  }, []);
+    axios.defaults.headers.common.Authorization = auth;
+  }, [auth]);
 
   return (
     <>

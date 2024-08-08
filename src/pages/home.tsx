@@ -12,6 +12,7 @@ import axios from '@/lib/axios';
 import { IQuote } from '@/lib/interfaces';
 import { getQuotes } from '@/lib/services';
 import CreateQuote from '@/components/create-quote';
+import { useStateValue } from '@/lib/context';
 
 interface IProps {
   user?: JwtPayload;
@@ -19,6 +20,7 @@ interface IProps {
 
 export default function Home({ user }: IProps) {
   const navigate = useNavigate();
+  const [auth, dispatch] = useStateValue();
   const { toast } = useToast();
   const [quotes, setQuotes] = useState<IQuote[]>([]);
   const [offset, setOffset] = useState(10);
@@ -34,10 +36,13 @@ export default function Home({ user }: IProps) {
         description: 'Error fetching Quotes',
         variant: 'destructive',
       });
-      localStorage.removeItem('auth:token');
+      dispatch!({
+        type: 'SET',
+        payload: null,
+      });
       navigate(0);
     }
-  }, [navigate, toast]);
+  }, [dispatch, navigate, toast]);
 
   const fetchQuotes = async () => {
     const _quotes = await getQuotes({ offset, limit: 10 });
@@ -51,15 +56,18 @@ export default function Home({ user }: IProps) {
         description: 'Error fetching Quotes',
         variant: 'destructive',
       });
-      localStorage.removeItem('auth:token');
+      dispatch!({
+        type: 'SET',
+        payload: null,
+      });
       navigate(0);
     }
   };
 
   useEffect(() => {
-    axios.defaults.headers.common.Authorization = localStorage.getItem('auth:token');
+    axios.defaults.headers.common.Authorization = auth;
     fetchInitialQuotes();
-  }, [fetchInitialQuotes]);
+  }, [auth, fetchInitialQuotes]);
 
   return (
     <>

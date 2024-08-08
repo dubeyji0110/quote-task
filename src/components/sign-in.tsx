@@ -13,6 +13,7 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from '@/component
 import { Icons } from '@/components/icons';
 import { signIn } from '@/lib/services';
 import { useNavigate } from 'react-router-dom';
+import { useStateValue } from '@/lib/context';
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const signInSchema = z.object({
@@ -25,6 +26,7 @@ export type SignInSchema = z.infer<typeof signInSchema>;
 const SignInForm = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [, dispatch] = useStateValue();
 
   const form = useForm<SignInSchema>({
     resolver: zodResolver(signInSchema),
@@ -37,10 +39,16 @@ const SignInForm = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement
   const onSubmit = async (data: SignInSchema) => {
     const token = await signIn(data);
     if (token) {
-      localStorage.setItem('auth:token', token);
+      dispatch!({
+        type: 'SET',
+        payload: token,
+      });
       navigate('/home', { replace: true });
     } else {
-      localStorage.removeItem('auth:token');
+      dispatch!({
+        type: 'SET',
+        payload: null,
+      });
       toast({
         title: 'Error',
         description: 'Invalid Credentials',
