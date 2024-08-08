@@ -83,6 +83,7 @@ export default function CreateQuote({ user }: IProps) {
       variant: 'success',
     });
     form.resetField('text');
+    setSelectedImage(null);
     navigate('/home');
   };
 
