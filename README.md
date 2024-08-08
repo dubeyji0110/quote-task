@@ -22,6 +22,8 @@ $ yarn install  or  $ npm install
 $ yarn dev or $ npm start dev
 ```
 
+visit http://localhost:5173 for the running app.
+
 ---
 
 ### Contributing:
