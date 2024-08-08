@@ -1,7 +1,5 @@
 # Quoto - A Quote Publishing website
 
----
-
 ### Prerequisite:
 
 - `git` installed in your machine
@@ -23,6 +21,8 @@ To install and set up the library, run:
 $ yarn install  or  $ npm install
 $ yarn dev or $ npm start dev
 ```
+
+---
 
 ### Contributing:
 
