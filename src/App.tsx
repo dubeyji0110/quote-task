@@ -1,4 +1,4 @@
-import { HashRouter as BrowserRouter, Route, Routes } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { jwtDecode, JwtPayload } from 'jwt-decode';
 import SignIn from './pages/sign-in';
@@ -9,6 +9,21 @@ import Create from './pages/create';
 
 function App() {
   const [user, setUser] = useState<JwtPayload | null>(null);
+
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      element: <SignIn />,
+    },
+    {
+      path: 'home',
+      element: <Home user={user!} />,
+    },
+    {
+      path: 'create',
+      element: <Create user={user!} />,
+    },
+  ]);
 
   useEffect(() => {
     const token = localStorage.getItem('auth:token');
@@ -23,14 +38,10 @@ function App() {
   }, []);
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<SignIn />} />
-        <Route path="/home" element={<Home user={user!} />} />
-        <Route path="/create" element={<Create user={user!} />} />
-      </Routes>
+    <>
+      <RouterProvider router={router} />
       <Toaster />
-    </BrowserRouter>
+    </>
   );
 }
 
